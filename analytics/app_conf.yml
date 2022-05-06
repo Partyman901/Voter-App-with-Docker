@@ -1,0 +1,9 @@
+version: 1
+datastore: 
+  user: enterdata
+  password: enterdata
+  hostname: localhost
+  port: 8080
+  db: enterdata
+scheduler:
+ period_sec: 5

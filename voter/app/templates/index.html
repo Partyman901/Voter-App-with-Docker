@@ -1,0 +1,36 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <style>
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            background-color: #538fbe;
+            padding: 10px 20px;
+            font-size: 30px;
+            border: 2px solid #2d6898;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="title">
+        Windows or Mac?
+        <hr>
+        <div>
+            <form method="POST" action="/windows">
+                <button class="button">Windows</button>
+            </form>
+            <form method="POST" action="/mac">
+                <button class="button">Mac</button>
+            </form>
+        </div>
+    </h1>
+</body>
+{% endblock %}

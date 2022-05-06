@@ -1,0 +1,5 @@
+Flask
+SQLAlchemy==1.4.27
+itsdangerous==2.0.1
+pymysql
+PyYAML

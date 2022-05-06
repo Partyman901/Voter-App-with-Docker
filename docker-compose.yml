@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: Passw0rd!
+      MYSQL_DATABASE: enterdata
+    ports:
+      - '3307:3306'
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+    - MONGO_INITDB_DATABASE=getdata
+    - MONGO_INITDB_ROOT_USERNAME=root
+    - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./mongo-dump/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    ports:
+      - '27017:27017'
+    command: [--auth]
+    restart: always
+  
+  analytics:
+    build: ./analytics
+    image: partyman901/analytics
+    container_name: analytics
+    ports: 
+      - '8100:8100'
+    restart: always
+    depends_on:
+      - mysql
+      - mongodb
+    
+  results:
+    image: partyman901/results
+    build: ./results
+    container_name: results
+    ports: 
+      - '8090:8090'
+    restart: always
+    depends_on:
+      - mysql
+      - mongodb
+
+  authentication:
+    image: partyman901/authentication
+    build: ./authentication
+    env_file:
+      - './authentication/.env'
+    ports:
+      - 8081:8080
+      - 81:8011
+      - 8011:8011
+    depends_on:
+      - mysql
+      - mongodb
+
+  voter:
+    build: ./voter
+    image: partyman901/voter
+    container_name: voter
+    ports: 
+      - '8110:8110'
+    restart: always
+    depends_on:
+      - mysql
+      - mongodb
+
